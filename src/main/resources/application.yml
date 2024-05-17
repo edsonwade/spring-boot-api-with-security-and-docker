@@ -1,6 +1,9 @@
 spring:
   application:
     name: security-service
+#  main:
+#    allow-bean-definition-overriding: true
+##    allow-circular-references: true
 
   datasource:
     url: jdbc:postgresql://localhost:5432/db_security
@@ -28,21 +31,25 @@ management:
       show-details: always  # Options are 'never', 'when-authorized', or 'always'
     info:
       enabled: true  # Enables the info endpoint
-  server:
-    port: 8081  # Actuator HTTP port, if you want a different port from the main app
-    address: 127.0.0.1  # Bind the actuator server to a specific network address
+#  server:
+#    port: 8082  # Actuator HTTP port, if you want a different port from the main app
+#    address: 127.0.0.1  # Bind the actuator server to a specific network address
 
-  security:
-    user:
-      name: admin
-      password: admin
-    roles: USER, ADMIN
+#  security:
+#    user:
+#      name: admin
+#      password: admin
+#    roles: USER, ADMIN
 
 # Additional Spring Security configuration
+#security:
+#  basic:
+#    enabled: true
+#  sessions: stateless
+#  ignored: /css/**,/js/**,/images/**,/webjars/**,/favicon.ico
+server:
+  port: 8081
+
 security:
-  basic:
-    enabled: true
-  sessions: stateless
-  ignored: /css/**,/js/**,/images/**,/webjars/**,/favicon.ico
-
-
+  user-password: 'user123'  # Consider encrypting this value in production
+  admin-password: 'admin124'  # Consider encrypting this value in production

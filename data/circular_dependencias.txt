@@ -1,0 +1,70 @@
+/**
+ * Configuração de segurança para a aplicação Spring Security.
+ * Esta classe configura a cadeia de filtros de segurança e a autenticação em memória para usuários.
+ *
+ * @author Autor
+ */
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Autowired
+    private AuthenticationManagerBuilder auth;
+
+    /**
+     * Bean para codificação de senhas usando BCrypt.
+     *
+     * @return PasswordEncoder que é um BCryptPasswordEncoder.
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * Configuração inicial da autenticação em memória.
+     * Este método é chamado após a inicialização dos beans e configura os usuários em memória.
+     *
+     * @throws Exception se ocorrer um erro durante a configuração da autenticação.
+     */
+    @PostConstruct
+    public void init() throws Exception {
+        auth.inMemoryAuthentication()
+            .withUser("user")
+            .password(passwordEncoder().encode("user123"))
+            .roles("USER")
+            .and()
+            .withUser("admin")
+            .password(passwordEncoder().encode("admin124"))
+            .roles("ADMIN");
+    }
+
+    /**
+     * Configura a cadeia de filtros de segurança HTTP.
+     * Define as regras de autorização, configuração de login e autenticação básica HTTP.
+     *
+     * @param http HttpSecurity para configurar.
+     * @return SecurityFilterChain construído a partir das configurações fornecidas.
+     * @throws Exception se ocorrer um erro durante a configuração da segurança HTTP.
+     */
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+            .formLogin().permitAll()
+            .and()
+            .httpBasic(); // Opcional: se desejar habilitar autenticação básica HTTP.
+
+        return http.build();
+    }
+}
+
+
+Explicação em Português de Portugal
+A configuração inicial que você forneceu tinha um problema de dependência circular devido à maneira como os beans estavam configurados no Spring Security. Em Spring, uma dependência circular ocorre quando dois ou mais beans estão configurados de forma que dependem uns dos outros diretamente ou indiretamente, criando um ciclo que o Spring não consegue resolver durante a inicialização da aplicação.
+
+No seu caso, o problema estava relacionado com a configuração do AuthenticationManagerBuilder como um bean e a sua utilização dentro do SecurityFilterChain. Isso criou uma dependência circular porque o SecurityFilterChain dependia do AuthenticationManagerBuilder para a configuração da autenticação, e o AuthenticationManagerBuilder estava sendo configurado como um bean que poderia, por sua vez, depender de outras configurações dentro do SecurityFilterChain.
+
+Para resolver isso, a configuração da autenticação foi movida para um método separado marcado com @PostConstruct. Isso garante que a configuração da autenticação ocorra após a inicialização dos beans, evitando a dependência circular. Além disso, o AuthenticationManagerBuilder foi injetado diretamente na classe, em vez de ser passado como um parâmetro, simplificando a configuração e evitando problemas com a ordem de criação dos beans.

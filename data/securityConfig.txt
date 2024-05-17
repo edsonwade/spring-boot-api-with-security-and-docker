@@ -1,0 +1,111 @@
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("admin")
+                .password("admin")
+                .roles("ADMIN")
+                .and()
+                .withUser("user")
+                .password("user")
+                .roles("USER");
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .anyRequest()
+                .permitAll()
+                .and()
+                .formLogin()
+                .permitAll();
+    }
+} --depreciate version .
+
+
+Better version
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+/**
+ * Security configuration class for Spring Security.
+ * This class configures the security settings for the application, including URL access rules and user authentication.
+ */
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    /**
+     * Configures the HTTP security settings for the application.
+     * This method sets up the authorization requests and forms login configuration.
+     *
+     * @param http the {@link HttpSecurity} to configure
+     * @return the configured {@link SecurityFilterChain}
+     * @throws Exception if an error occurs during configuration
+     */
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .anyRequest()
+                .permitAll()
+                .and()
+                .formLogin()
+                .permitAll();
+        return http.build();
+    }
+
+    /**
+     * Configures in-memory authentication with user details.
+     * This method sets up the user details for authentication, specifying usernames, passwords, and roles.
+     *
+     * @param auth the {@link AuthenticationManagerBuilder} to configure
+     * @return the configured {@link AuthenticationManagerBuilder}
+     * @throws Exception if an error occurs during configuration
+     */
+
+    @Bean
+    public AuthenticationManagerBuilder authenticationManagerBuilder(AuthenticationManagerBuilder auth)
+            throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("admin")
+                .password(passwordEncoder()
+                        .encode("admin123"))
+                .roles("ADMIN")
+                .and()
+                .withUser("user")
+                .password(passwordEncoder()
+                        .encode("user123"))
+                .roles("USER");
+        return auth;
+    }
+
+    /**
+     * Creates a password encoder that uses the BCrypt strong hashing function.
+     * This bean is used to encode passwords securely.
+     *
+     * @return the {@link PasswordEncoder} instance
+     */
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
