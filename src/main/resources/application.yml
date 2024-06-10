@@ -1,7 +1,9 @@
 spring:
   application:
     name: security-service
-#  main:
+  profiles:
+    active: dev
+  #  main:
 #    allow-bean-definition-overriding: true
 ##    allow-circular-references: true
 
