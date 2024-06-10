@@ -1,4 +1,4 @@
-package code.with.vanilson.securityservice.config;
+package code.with.vanilson.securityservice.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
