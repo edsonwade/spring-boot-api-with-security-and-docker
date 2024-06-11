@@ -1,9 +1,9 @@
 package code.with.vanilson.securityservice.domain;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
 
 @Entity
 @Table(name = "employees")

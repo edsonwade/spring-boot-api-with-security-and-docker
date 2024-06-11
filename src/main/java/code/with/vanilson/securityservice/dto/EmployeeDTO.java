@@ -1,9 +1,7 @@
 package code.with.vanilson.securityservice.dto;
 
+import jakarta.validation.constraints.*;
 import lombok.Data;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Data
 public class EmployeeDTO {

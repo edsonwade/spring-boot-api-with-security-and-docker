@@ -2,7 +2,7 @@ package code.with.vanilson.securityservice.domain;
 
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "roles")

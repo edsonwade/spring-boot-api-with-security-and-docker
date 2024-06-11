@@ -31,7 +31,7 @@ public class AccountServiceImpl {
 
     public Account createAccount(Account account) {
         account.setPassword(encoder.encode(account.getPassword()));
-        Role role = roleRepository.findRoleByName("ROLE_USER");
+        Role role = roleRepository.findRoleByName("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         account.setRoles(roles);
