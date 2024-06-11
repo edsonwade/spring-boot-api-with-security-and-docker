@@ -52,7 +52,7 @@ public class AccountMapperTest {
         // Create test data
         Account account = new Account();
         account.setId(1L);
-        account.setUserName("testuser");
+        account.setUsername("testuser");
         account.setPassword(passwordEncoder.encode("testpassword"));
         account.setEnabled(true);
         account.setLocked(false);
@@ -65,7 +65,7 @@ public class AccountMapperTest {
 
         // Assertions
         assertEquals(account.getId(), accountDTO.getId());
-        assertEquals(account.getUserName(), accountDTO.getUserName());
+        assertEquals(account.getUsername(), accountDTO.getUserName());
         assertEquals(account.getPassword(), accountDTO.getPassword());
         assertEquals(account.isEnabled(), accountDTO.isEnabled());
         assertEquals(account.isLocked(), accountDTO.isLocked());
@@ -90,7 +90,7 @@ public class AccountMapperTest {
         // Create test data
         Account account = new Account();
         account.setId(1L);
-        account.setUserName("testuser");
+        account.setUsername("testuser");
         account.setPassword(passwordEncoder.encode("testpassword"));
         account.setEnabled(true);
         account.setLocked(false);
@@ -105,7 +105,7 @@ public class AccountMapperTest {
         // Assertions
         assertEquals(1, accountDTOList.size());
         assertEquals(account.getId(), accountDTOList.get(0).getId());
-        assertEquals(account.getUserName(), accountDTOList.get(0).getUserName());
+        assertEquals(account.getUsername(), accountDTOList.get(0).getUserName());
         assertEquals(account.getPassword(), accountDTOList.get(0).getPassword());
         assertEquals(account.isEnabled(), accountDTOList.get(0).isEnabled());
         assertEquals(account.isLocked(), accountDTOList.get(0).isLocked());
@@ -197,7 +197,7 @@ public class AccountMapperTest {
 
         // Assertions
         assertEquals(accountDTO.getId(), account.getId());
-        assertEquals(accountDTO.getUserName(), account.getUserName());
+        assertEquals(accountDTO.getUserName(), account.getUsername());
         assertEquals(accountDTO.getPassword(), account.getPassword());
         assertEquals(accountDTO.isEnabled(), account.isEnabled());
         assertEquals(accountDTO.isLocked(), account.isLocked());

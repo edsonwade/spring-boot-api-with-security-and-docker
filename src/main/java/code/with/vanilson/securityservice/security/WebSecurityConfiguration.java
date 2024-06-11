@@ -8,23 +8,24 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration {
 
-    private final PasswordEncoder passwordEncoder;
+    private final AccountAuthenticationProvider accountAuthenticationProvider;
 
-    public WebSecurityConfiguration(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    public WebSecurityConfiguration(
+            AccountAuthenticationProvider accountAuthenticationProvider) {
+
+        this.accountAuthenticationProvider = accountAuthenticationProvider;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManager = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManager.authenticationProvider(null);
+        authenticationManager.authenticationProvider(accountAuthenticationProvider);
         http.csrf()
                 .disable()
                 .authorizeRequests()
@@ -40,27 +41,5 @@ public class WebSecurityConfiguration {
 
         return http.build();
     }
-
-    /**
-     * Its only use for testing
-     */
-
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//
-//        UserDetails user = User.builder()
-//                .username("user")
-//                .password(passwordEncoder.encode("password"))
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder.encode("password"))
-//                .roles("ADMIN")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(user, admin);
-//    }
 
 }

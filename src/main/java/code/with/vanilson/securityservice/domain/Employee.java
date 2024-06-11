@@ -16,7 +16,8 @@ import javax.validation.constraints.Email;
 @Setter
 public class Employee {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "employee_id")
     private int employeeId;
     private String firstName;
     private String lastName;

@@ -95,7 +95,7 @@ class AccountServiceTest {
         accountDTO.setPassword("testpassword");
 
         // Mock repository response (username does not exist)
-        when(accountRepository.existsByUserName(accountDTO.getUserName())).thenReturn(false);
+        when(accountRepository.existsByUsername(accountDTO.getUserName())).thenReturn(false);
 
         // Mock mapper response
         Account account = new Account();
@@ -109,7 +109,7 @@ class AccountServiceTest {
         AccountDTO result = accountService.createAccount(accountDTO);
 
         // Verify interactions
-        verify(accountRepository).existsByUserName(accountDTO.getUserName());
+        verify(accountRepository).existsByUsername(accountDTO.getUserName());
         verify(accountMapper).toAccountEntity(accountDTO);
         verify(accountRepository).save(account);
         verify(accountMapper).toAccountDTO(account);
@@ -127,7 +127,7 @@ class AccountServiceTest {
         accountDTO.setPassword("testpassword");
 
         // Mock repository response (username already exists)
-        when(accountRepository.existsByUserName(accountDTO.getUserName())).thenReturn(true);
+        when(accountRepository.existsByUsername(accountDTO.getUserName())).thenReturn(true);
 
         // Call the service method and verify that it throws the expected exception
         Assertions.assertThrows(
@@ -136,7 +136,7 @@ class AccountServiceTest {
         );
 
         // Verify interactions
-        verify(accountRepository).existsByUserName(accountDTO.getUserName());
+        verify(accountRepository).existsByUsername(accountDTO.getUserName());
         // Ensure that other interactions (save, mapper calls) do not happen
     }
 
@@ -157,7 +157,7 @@ class AccountServiceTest {
         // Mock repository response (existing account found)
         Account account = new Account();
         account.setId(1L);
-        account.setUserName("testuser");
+        account.setUsername("testuser");
         account.setPassword("testpassword");
         account.setEnabled(true);
         account.setLocked(false);
@@ -165,7 +165,7 @@ class AccountServiceTest {
         account.setCredentialExpired(false);
         account.setRoles(Collections.emptySet());
         when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
-        when(accountRepository.existsByUserName(accountDTO.getUserName())).thenReturn(false);
+        when(accountRepository.existsByUsername(accountDTO.getUserName())).thenReturn(false);
 
         // Mock mapper response
         AccountDTO mappedAccountDTO = accountMapper.toAccountDTO(account);
@@ -176,7 +176,7 @@ class AccountServiceTest {
 
         // Verify interactions
         verify(accountRepository).findById(accountId);
-        verify(accountRepository).existsByUserName(accountDTO.getUserName());
+        verify(accountRepository).existsByUsername(accountDTO.getUserName());
         verify(accountRepository).save(account);
        verify(accountMapper).toAccountDTO(account);
 
@@ -200,10 +200,10 @@ class AccountServiceTest {
         // Mock repository response (existing account found)
         Account existingAccount = new Account();
         existingAccount.setId(accountId);
-        existingAccount.setUserName("existinguser");
+        existingAccount.setUsername("existinguser");
         existingAccount.setRoles(Collections.emptySet());
         when(accountRepository.findById(accountId)).thenReturn(Optional.of(existingAccount));
-        when(accountRepository.existsByUserName(accountDTO.getUserName())).thenReturn(true);
+        when(accountRepository.existsByUsername(accountDTO.getUserName())).thenReturn(true);
 
         // Call the service method and verify that it throws the expected exception
         Assertions.assertThrows(
@@ -213,7 +213,7 @@ class AccountServiceTest {
 
         // Verify interactions
         verify(accountRepository).findById(accountId);
-        verify(accountRepository).existsByUserName(accountDTO.getUserName());
+        verify(accountRepository).existsByUsername(accountDTO.getUserName());
         // Ensure that other interactions (save, mapper calls) do not happen
     }
 

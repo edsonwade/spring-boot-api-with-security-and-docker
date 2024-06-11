@@ -1,23 +1,23 @@
--- Create sequence for user_id
+-- Create sequence for employee_id
 CREATE SEQUENCE employee_id_seq START 1;
 
--- Create table for users
-CREATE TABLE users
+-- Create table for employees
+CREATE TABLE employees
 (
     employee_id INT DEFAULT NEXTVAL('employee_id_seq') PRIMARY KEY,
     firstname   VARCHAR(100)        NOT NULL,
     lastname    VARCHAR(100)        NOT NULL,
     username    VARCHAR(100) UNIQUE NOT NULL,
     email       VARCHAR(100) UNIQUE NOT NULL
-
 );
 
-INSERT INTO users (firstname, lastname, username, email)
-VALUES ('John', 'Doe', 'johndoe', 'john.doe@example.com'),
-       ('Jane', 'Smith', 'janesmith', 'jane.smith@example.com'),
-       ('Alice', 'Johnson', 'alicej', 'alice.johnson@example.com'),
-       ('Bob', 'Brown', 'bobb', 'bob.brown@example.com'),
-       ('Charlie', 'Davis', 'charlied', 'charlie.davis@example.com');
+-- Insert initial data into employees table
+INSERT INTO employees (employee_id, firstname, lastname, username, email)
+VALUES (nextval('employee_id_seq'), 'John', 'Doe', 'johndoe', 'john.doe@example.com'),
+       (nextval('employee_id_seq'), 'Jane', 'Smith', 'janesmith', 'jane.smith@example.com'),
+       (nextval('employee_id_seq'), 'Alice', 'Johnson', 'alicej', 'alice.johnson@example.com'),
+       (nextval('employee_id_seq'), 'Bob', 'Brown', 'bobb', 'bob.brown@example.com'),
+       (nextval('employee_id_seq'), 'Charlie', 'Davis', 'charlied', 'charlie.davis@example.com');
 
 -- Create sequence for roles
 CREATE SEQUENCE IF NOT EXISTS role_id_seq START 1;
@@ -31,12 +31,12 @@ CREATE TABLE IF NOT EXISTS roles
 );
 
 -- Insert initial data into roles table
-INSERT INTO roles (name, code)
-VALUES ('Admin', 'ADMIN'),
-       ('User', 'USER'),
-       ('Manager', 'MANAGER'),
-       ('Guest', 'GUEST'),
-       ('Moderator', 'MODERATOR');
+INSERT INTO roles (role_id, name, code)
+VALUES (nextval('role_id_seq'),'Admin', 'ADMIN'),
+       (nextval('role_id_seq'),'User', 'USER'),
+       (nextval('role_id_seq'),'Manager', 'MANAGER'),
+       (nextval('role_id_seq'),'Guest', 'GUEST'),
+       (nextval('role_id_seq'),'Moderator', 'MODERATOR');
 
 -- Create sequence for accounts
 CREATE SEQUENCE IF NOT EXISTS account_id_seq START 1;
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS accounts
 (
     account_id         BIGINT                DEFAULT NEXTVAL('account_id_seq') PRIMARY KEY,
     username           VARCHAR(255) UNIQUE NOT NULL,
-    password           VARCHAR(10)  NOT NULL,
+    password           VARCHAR(200)  NOT NULL,
     enabled            BOOLEAN      NOT NULL DEFAULT TRUE,
     locked             BOOLEAN      NOT NULL DEFAULT FALSE,
     expired            BOOLEAN      NOT NULL DEFAULT FALSE,
@@ -54,12 +54,12 @@ CREATE TABLE IF NOT EXISTS accounts
 );
 
 -- Insert initial data into accounts table
-INSERT INTO accounts (username, password, enabled, locked, expired, credential_expired)
-VALUES ('admin', 'admin1234', TRUE, FALSE, FALSE, FALSE),
-       ('user', 'user1234', TRUE, FALSE, FALSE, FALSE),
-       ('manager', 'manager1234', TRUE, FALSE, FALSE, FALSE),
-       ('guest', 'guest1234', TRUE, FALSE, FALSE, FALSE),
-       ('moderator', 'moderator1234', TRUE, FALSE, FALSE, FALSE);
+INSERT INTO accounts (account_id, username, password, enabled, locked, expired, credential_expired)
+VALUES (nextval('account_id_seq'), 'admin', 'admin1234', TRUE, FALSE, FALSE, FALSE),
+       (nextval('account_id_seq'), 'user', 'user1234', TRUE, FALSE, FALSE, FALSE),
+       (nextval('account_id_seq'), 'manager', 'manager1234', TRUE, FALSE, FALSE, FALSE),
+       (nextval('account_id_seq'), 'guest', 'guest1234', TRUE, FALSE, FALSE, FALSE),
+       (nextval('account_id_seq'), 'moderator', 'moderator1234', TRUE, FALSE, FALSE, FALSE);
 
 -- Create AccountRole join table
 CREATE TABLE IF NOT EXISTS AccountRole
@@ -75,8 +75,6 @@ CREATE TABLE IF NOT EXISTS AccountRole
 INSERT INTO AccountRole (accountId, roleId)
 VALUES ((SELECT account_id FROM accounts WHERE username = 'admin'), (SELECT role_id FROM roles WHERE code = 'ADMIN')),
        ((SELECT account_id FROM accounts WHERE username = 'user'), (SELECT role_id FROM roles WHERE code = 'USER')),
-       ((SELECT account_id FROM accounts WHERE username = 'manager'),
-        (SELECT role_id FROM roles WHERE code = 'MANAGER')),
+       ((SELECT account_id FROM accounts WHERE username = 'manager'), (SELECT role_id FROM roles WHERE code = 'MANAGER')),
        ((SELECT account_id FROM accounts WHERE username = 'guest'), (SELECT role_id FROM roles WHERE code = 'GUEST')),
-       ((SELECT account_id FROM accounts WHERE username = 'moderator'),
-        (SELECT role_id FROM roles WHERE code = 'MODERATOR'));
+       ((SELECT account_id FROM accounts WHERE username = 'moderator'), (SELECT role_id FROM roles WHERE code = 'MODERATOR'));

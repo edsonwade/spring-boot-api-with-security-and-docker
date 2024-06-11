@@ -81,4 +81,27 @@
 //
 //        return http.build();
 //    }
+
+/**
+ * Its only use for testing
+ */
+
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//
+//        UserDetails user = User.builder()
+//                .username("user")
+//                .password(passwordEncoder.encode("password"))
+//                .roles("USER")
+//                .build();
+//
+//        UserDetails admin = User.builder()
+//                .username("admin")
+//                .password(passwordEncoder.encode("password"))
+//                .roles("ADMIN")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(user, admin);
+//    }
+
 //}
