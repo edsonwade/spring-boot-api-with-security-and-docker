@@ -24,7 +24,7 @@ public class AccountMapper {
         }
         return AccountDTO.builder()
                 .id(account.getId())
-                .userName(account.getUserName())
+                .userName(account.getUsername())
                 .password(passwordEncoder.encode(account.getPassword()))
                 .enabled(account.isEnabled())
                 .locked(account.isLocked())
@@ -57,7 +57,7 @@ public class AccountMapper {
         }
         return Account.builder()
                 .id(accountDTO.getId())
-                .userName(accountDTO.getUserName())
+                .username(accountDTO.getUserName())
                 .password(passwordEncoder.encode(accountDTO.getPassword()))
                 .enabled(accountDTO.isEnabled())
                 .locked(accountDTO.isLocked())

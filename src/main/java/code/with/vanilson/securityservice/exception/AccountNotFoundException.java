@@ -8,4 +8,8 @@ public class AccountNotFoundException extends RuntimeException {
     public AccountNotFoundException() {
         super("Account with {0} Not Found");
     }
+
+    public AccountNotFoundException(String message) {
+        super(message);
+    }
 }

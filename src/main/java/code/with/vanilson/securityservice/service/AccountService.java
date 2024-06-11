@@ -69,7 +69,7 @@ public class AccountService {
      */
     public AccountDTO createAccount(AccountDTO accountDTO) {
         // Check if username already exists
-        if (accountRepository.existsByUserName(accountDTO.getUserName())) {
+        if (accountRepository.existsByUsername(accountDTO.getUserName())) {
             usernameAlreadyExists();
             throw new UsernameAlreadyExistsException(
                     MessageFormat.format("Username already exists: {0}", accountDTO.getUserName()));
@@ -95,7 +95,7 @@ public class AccountService {
                 .orElseThrow(AccountNotFoundException::new);
 
         // Check if username already exists (excluding the current account)
-        if (accountRepository.existsByUserName(accountDTO.getUserName())) {
+        if (accountRepository.existsByUsername(accountDTO.getUserName())) {
             usernameAlreadyExists();
             throw new UsernameAlreadyExistsException(
                     MessageFormat.format("Username already exists: {0}", accountDTO.getUserName()));
@@ -103,9 +103,9 @@ public class AccountService {
 
         // Update the existing account entity with the new details
         // Validate if the new username is the same as the existing one
-        if (!existingAccount.getUserName().equals(accountDTO.getUserName())) {
+        if (!existingAccount.getUsername().equals(accountDTO.getUserName())) {
             // Update the existing account entity with the new username
-            existingAccount.setUserName(accountDTO.getUserName());
+            existingAccount.setUsername(accountDTO.getUserName());
         }
         existingAccount.setPassword(accountDTO.getPassword());
         existingAccount.setEnabled(accountDTO.isEnabled());
