@@ -20,6 +20,8 @@ The main objective of this project is to demonstrate the implementation of a sec
 - **Backend (Spring Boot)**:
   - Configuration files for application properties
   - Security configuration
+  - docker system prune
+
 
 ## 🤝 Contribution
 Contributions are welcome! Fork the repository, make your changes, and submit a pull request.

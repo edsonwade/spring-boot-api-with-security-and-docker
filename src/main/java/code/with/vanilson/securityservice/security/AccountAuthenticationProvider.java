@@ -1,6 +1,6 @@
 package code.with.vanilson.securityservice.security;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -11,27 +11,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
+@RequiredArgsConstructor
 public class AccountAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
     private final UserDetailsService userDetailsService;
-    private final PasswordEncoder passwordEncoder;
-
-    public AccountAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
-        this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final PasswordEncoder encoder;
 
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails,
                                                   UsernamePasswordAuthenticationToken authentication)
             throws AuthenticationException {
-
         if (authentication.getCredentials() == null || userDetails.getPassword() == null) {
-            log.debug("Authentication failed: no credentials provided");
-            throw new BadCredentialsException("Invalid username and password");
+            throw new BadCredentialsException("Credentials may not be null");
         }
-        if (!passwordEncoder.matches(authentication.getCredentials().toString(), userDetails.getPassword())) {
-            log.debug("Authentication failed: password does not match");
+        if (!encoder.matches((String) authentication.getCredentials(), userDetails.getPassword())) {
             throw new BadCredentialsException("Invalid credentials");
         }
 
@@ -40,7 +32,6 @@ public class AccountAuthenticationProvider extends AbstractUserDetailsAuthentica
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)
             throws AuthenticationException {
-        log.info("Retrieving user {}", username);
         return userDetailsService.loadUserByUsername(username);
     }
 }
